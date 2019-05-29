@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using University.Data;
 
 namespace University
 {
@@ -14,6 +16,8 @@ namespace University
     {
         public static void Main(string[] args)
         {
+            Mapper.Initialize(cfg => cfg.AddProfile<MapperProfile>());
+
             CreateWebHostBuilder(args).Build().Run();
         }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,15 +25,21 @@ namespace University.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await _context.Student
-                .Include(s => s.Address)
-                .Select(m => new StudentListViewModel
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    City = m.Address.City,
-                    Street = m.Address.Street
-                })
+                .ProjectTo<StudentListViewModel>()
                 .ToListAsync();
+
+            //Replaced av automapper
+
+            //var model = await _context.Student
+            //    .Include(s => s.Address)
+            //    .Select(m => new StudentListViewModel
+            //    {
+            //        Id = m.Id,
+            //        Name = m.Name,
+            //        AddressCity = m.Address.City,
+            //        AddressStreet = m.Address.Street
+            //    })
+            //    .ToListAsync();
 
             return View(model);
         }
@@ -70,16 +78,17 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var student = new Student
-                {
-                    Name = viewModel.Name,
-                    Email = viewModel.Email,
-                    Address = new Address
-                    {
-                        Street = viewModel.Street,
-                        City = viewModel.City
-                    }
-                };
+                var student = Mapper.Map<Student>(viewModel);
+                //var student = new Student
+                //{
+                //    Name = viewModel.Name,
+                //    Email = viewModel.Email,
+                //    Address = new Address
+                //    {
+                //        Street = viewModel.Street,
+                //        City = viewModel.City
+                //    }
+                //};
                 _context.Add(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
