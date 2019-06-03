@@ -33,6 +33,8 @@ namespace University.Controllers
             }
 
             var course = await _context.Course
+                .Include(c => c.Enrollments)
+                .ThenInclude(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {

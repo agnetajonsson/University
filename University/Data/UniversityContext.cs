@@ -17,5 +17,7 @@ namespace University.Models
         public DbSet<Student> Student { get; set; }
 
         public DbSet<University.Models.Course> Course { get; set; }
+
+        public DbSet<University.Models.Enrollment> Enrollment { get; set; }
     }
 }
