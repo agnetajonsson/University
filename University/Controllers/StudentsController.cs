@@ -7,6 +7,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using University.Data;
 using University.Models;
 using University.ViewModels;
 
@@ -24,6 +25,9 @@ namespace University.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
+            //ProjectTo är en extension metod på IQueryable
+            //Vi tar en student och mappar den till en StudentListViewModel
+            //Automapper kan med hjälp av namnen på propertierna själv sköta mappningen i det här fallet
             var model = await _context.Student
                 .ProjectTo<StudentListViewModel>()
                 .ToListAsync();
@@ -52,6 +56,7 @@ namespace University.Controllers
                 return NotFound();
             }
 
+            //Här har vi angett mappningsreglerna i MapperProfile
             var student = await _context.Student
                 .ProjectTo<StudentDetailsViewModel>()
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -79,7 +84,10 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Här använder vi oss av den statiska automapper
                 var student = Mapper.Map<Student>(viewModel);
+                
+                //Har ersatts av Automapper
                 //var student = new Student
                 //{
                 //    Name = viewModel.Name,

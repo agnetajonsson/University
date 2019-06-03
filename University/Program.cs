@@ -17,6 +17,9 @@ namespace University
     {
         public static void Main(string[] args)
         {
+            //Lägger till Automapper den statiska versionen av Automapper
+            //och talar om villken configurations klass vi använder oss av
+            //i det här fallet MapperProfile
             Mapper.Initialize(cfg => cfg.AddProfile<MapperProfile>());
 
             IWebHost webHost = CreateWebHostBuilder(args).Build();
@@ -24,6 +27,7 @@ namespace University
             using (var scope = webHost.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                //Seed
                 SeedData.Initialize(services);
             }
 

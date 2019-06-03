@@ -32,6 +32,8 @@ namespace University.Controllers
                 return NotFound();
             }
 
+            //Med hjälp av Include så hämtar vi ned alla enrollments för kursen
+            //ThenInclude hämtar alla studenter för dessa enrollments
             var course = await _context.Course
                 .Include(c => c.Enrollments)
                 .ThenInclude(e => e.Student)
